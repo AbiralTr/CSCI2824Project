@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 
 class TowerOfHanoiGUI:
     def __init__(self, root, num_disks):
@@ -16,14 +17,18 @@ class TowerOfHanoiGUI:
         self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg="white")
         self.canvas.pack()
 
+        # Rod lists of (id, width, color)
         self.rods = [[], [], []]
         self.initialize_disks()
         self.draw_rods()
         self.draw_disks()
 
+        # Start Movement
+        self.root.after(1000, lambda: self.move_disks(self.num_disks, 0, 2, 1))
+
     def initialize_disks(self):
-        for i in range(self.num_disks, 0, -1):
-            width = self.disk_max_width - (self.disk_max_width - self.disk_min_width) * (i - 1) // (self.num_disks - 1)
+        for i in range(1, self.num_disks + 1):
+            width = self.disk_max_width - (self.disk_max_width - self.disk_min_width) * (i - 1) // max(1, self.num_disks - 1)
             color = self.colors[(i - 1) % len(self.colors)]
             self.rods[0].append((i, width, color))
 
@@ -36,7 +41,7 @@ class TowerOfHanoiGUI:
         self.canvas.delete("disk")
         for rod_index, rod in enumerate(self.rods):
             x_center = self.rod_x[rod_index]
-            for level, (disk_id, width, color) in enumerate(reversed(rod)):
+            for level, (disk_id, width, color) in enumerate(rod):
                 y = self.canvas_height - (level + 1) * self.disk_height
                 self.canvas.create_rectangle(
                     x_center - width // 2,
@@ -46,10 +51,28 @@ class TowerOfHanoiGUI:
                     fill=color,
                     tags="disk"
                 )
+        self.root.update()
 
-# Run the GUI
+    def move_disks(self, n, source, target, auxiliary):
+        if n == 1:
+            self.move_single_disk(source, target)
+        else:
+            self.move_disks(n - 1, source, auxiliary, target)
+            self.move_single_disk(source, target)
+            self.move_disks(n - 1, auxiliary, target, source)
+
+    def move_single_disk(self, from_rod, to_rod):
+        if not self.rods[from_rod]:
+            return
+        disk = self.rods[from_rod].pop()
+        self.rods[to_rod].append(disk)
+        self.draw_disks()
+        time.sleep(1)  # Spacing for Visualization
+
+# Run
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Tower of Hanoi")
-    app = TowerOfHanoiGUI(root, num_disks=6)
+    num_disks = 6  # Current Hardcoded Num Disks (Create UI Later T_T)
+    app = TowerOfHanoiGUI(root, num_disks=num_disks)
     root.mainloop()
