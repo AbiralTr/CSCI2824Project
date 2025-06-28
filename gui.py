@@ -73,6 +73,21 @@ class TowerOfHanoiGUI:
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Tower of Hanoi")
-    num_disks = 6  # Current Hardcoded Num Disks (Create UI Later T_T)
+    x = tk.IntVar()
+    def get_input():
+        x.set(entry.get())
+
+    # Create an Entry widget
+    entry = tk.Entry(root)
+    entry.pack(pady=10)
+
+    # Create a button to trigger reading the input
+    submit_button = tk.Button(root, text="Submit", command=get_input)
+    submit_button.pack()
+    
+    root.wait_variable(x)
+    num_disks = x.get()  # Current Hardcoded Num Disks (Create UI Later T_T)
+    entry.destroy()
+    submit_button.destroy()
     app = TowerOfHanoiGUI(root, num_disks=num_disks)
     root.mainloop()
