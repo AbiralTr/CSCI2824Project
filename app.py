@@ -17,7 +17,7 @@ class TowerOfHanoiGUI:
         self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg="white")
         self.canvas.pack()
 
-        # Rod lists of (id, width, color)
+        # Rod lists of (name, width, color)
         self.rods = [[], [], []]
         self.initialize_disks()
         self.draw_rods()
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     submit_button.pack()
     
     root.wait_variable(x)
-    num_disks = x.get()  # Current Hardcoded Num Disks (Create UI Later T_T)
+    num_disks = x.get()
     entry.destroy()
     submit_button.destroy()
     app = TowerOfHanoiGUI(root, num_disks=num_disks)
