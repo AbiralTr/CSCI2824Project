@@ -1,6 +1,7 @@
 # CSCI2824Project
 
 Python Version: 3.12.5
+Library: Tkinter
 
 Intructions: 
 1. Run app.py

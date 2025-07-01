@@ -2,9 +2,10 @@ import tkinter as tk
 import time
 
 class TowerOfHanoiGUI:
-    def __init__(self, root, num_disks):
+    def __init__(self, root, num_disks, speed_delay):
         self.root = root
         self.num_disks = num_disks
+        self.speed_delay = speed_delay
         self.canvas_width = 600
         self.canvas_height = 400
         self.rod_x = [150, 300, 450]
@@ -67,7 +68,7 @@ class TowerOfHanoiGUI:
         disk = self.rods[from_rod].pop()
         self.rods[to_rod].append(disk)
         self.draw_disks()
-        time.sleep(1)  # Spacing for Visualization
+        time.sleep(self.speed_delay)  # Spacing for Visualization
 
 # Run
 if __name__ == "__main__":
@@ -75,11 +76,20 @@ if __name__ == "__main__":
     root.title("Tower of Hanoi")
     x = tk.IntVar()
     def get_input():
+        global speed
         x.set(entry.get())
-
+        speed = speed_entry.get()
     # Create an Entry widget
+    entry_label = tk.Label(root, text="Enter number of disks:")
+    entry_label.pack()
     entry = tk.Entry(root)
-    entry.pack(pady=10)
+    entry.pack(pady=5)
+
+    # Create Speed Entry widget
+    speed_label = tk.Label(root, text="Enter speed in seconds:")
+    speed_label.pack()
+    speed_entry = tk.Entry(root)
+    speed_entry.pack(pady=5)
 
     # Create a button to trigger reading the input
     submit_button = tk.Button(root, text="Submit", command=get_input)
@@ -87,7 +97,14 @@ if __name__ == "__main__":
     
     root.wait_variable(x)
     num_disks = x.get()
+    speed = float(speed)
+
+    # Clean up GUI during animation
     entry.destroy()
     submit_button.destroy()
-    app = TowerOfHanoiGUI(root, num_disks=num_disks)
+    speed_entry.destroy()
+    entry_label.destroy()
+    speed_label.destroy()
+
+    app = TowerOfHanoiGUI(root, num_disks=num_disks, speed_delay=speed)
     root.mainloop()
