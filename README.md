@@ -8,7 +8,6 @@ Intructions:
 2. Input number of desired disks
 3. Input Speed
 4. Press submit
-5. Restart if desired
 
 Team: Johnny, Abiral
 
